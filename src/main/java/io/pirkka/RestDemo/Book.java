@@ -1,31 +1,37 @@
 package io.pirkka.RestDemo;
 
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
 @Entity 
+@TypeDefs( {@TypeDef( name= "JsonNode", typeClass = JsonNodeUserType.class)})
 @Table (name = "books")
 public class Book {
     @Id @Column (name = "id", nullable = false)
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private int id;
+    @SequenceGenerator(name="generator_book_id",sequenceName="seq_book_id", allocationSize=1)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="generator_book_id")
+    private long id;
 
-    @Column(name = "data")
-    @Convert(converter = JsonNodeConverter.class)
+    @Column(name = "data", columnDefinition = "json")
+    @Type(type = "JsonNode")
     private JsonNode json;
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

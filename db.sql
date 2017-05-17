@@ -7,6 +7,9 @@
 -- CREATE USER RestDemo WITH PASSWORD 'RestDemo';
 -- GRANT ALL PRIVILEGES ON DATABASE RestDemo to RestDemo;
 
+create sequence SEQ_BOOK_ID;
+alter sequence SEQ_BOOK_ID owner to restdemo;
+
 CREATE TABLE books ( id integer, data json );
 alter table books owner to restdemo;
 
